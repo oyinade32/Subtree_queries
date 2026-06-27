@@ -31,7 +31,7 @@ This approach becomes slow for large trees because each query may traverse a lar
 
 ---
 
-## 2. Optimized Approach (Euler Tour + Fenwick Tree)
+## 2. Optimized Euler Tour + Fenwick Tree Approach
 
 ### Idea
 The tree is flattened using an Euler Tour technique so that each subtree corresponds to a continuous range in an array.
@@ -76,41 +76,40 @@ benches/
 
 ## Benchmark Results
 
-The benchmark compares performance on increasing tree sizes.
+The benchmark compares the performance of the naive and optimized implementations for both update and subtree query operations using different tree sizes.
 
-Example results:
-n = 100
-Naive: ~818 µs
-Optimized: ~4 µs
+| Tree Size | Operation     |        Naive | Optimized |
+| --------- | ------------- | -----------: | --------: |
+| 100       | Update        |     4.324 µs |  8.785 µs |
+| 100       | Subtree Query |   645.838 µs | 10.187 µs |
+| 500       | Update        |     4.195 µs | 11.992 µs |
+| 500       | Subtree Query |  3.896713 ms | 19.802 µs |
+| 1000      | Update        |     4.800 µs | 14.229 µs |
+| 1000      | Subtree Query |  6.290066 ms | 21.161 µs |
+| 2000      | Update        |     5.014 µs | 15.838 µs |
+| 2000      | Subtree Query | 14.894762 ms | 21.439 µs |
 
-n = 500
-Naive: ~3 ms
-Optimized: ~7 µs
-
-n = 1000
-Naive: ~8 ms
-Optimized: ~8 µs
-
-n = 2000
-Naive: ~28 ms
-Optimized: ~9 µs
-
-
----
 
 ## Key Insight
 
-The optimized solution remains almost constant in performance because it avoids traversing the tree for every query.
+The benchmark shows that the naive implementation performs node updates slightly faster because it only changes a single value in the array.
 
-Instead, it converts subtree queries into range queries on a flattened array.
+However, subtree queries become significantly slower as the tree grows because the algorithm performs a Depth-First Search (DFS) for every query.
+
+The optimized implementation spends slightly more time updating values because it must also update the Fenwick Tree. In return, subtree queries remain very fast since the Euler Tour converts each subtree into a continuous range, allowing the Fenwick Tree to answer range-sum queries efficiently.
+
 
 ---
-
 ## Conclusion
 
-The Euler Tour + Fenwick Tree approach significantly outperforms the naive DFS method, especially for large inputs.
+This project compares a naive DFS approach with an optimized Euler Tour and Fenwick Tree approach for solving subtree queries.
 
-This demonstrates the importance of preprocessing and advanced data structures in optimizing tree-based queries.
+The benchmark demonstrates that although the naive implementation performs updates faster, its subtree queries become much slower as the input size increases because each query traverses the tree.
+
+The optimized implementation performs updates in **O(log n)** time due to Fenwick Tree maintenance, while both updates and subtree queries scale efficiently for large datasets. This makes it the preferred solution when processing many queries on large trees.
+
+Overall, the project shows how preprocessing and efficient data structures can significantly improve the performance of tree-based algorithms.
+
 
 ---
 
